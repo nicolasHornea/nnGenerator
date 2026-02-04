@@ -19,14 +19,14 @@ class LinearLayer(object):
     def init_params(self, std=1.):
         self.weight = std * torch.randn_like(self.weight)
 
-        if self.use_bias:
-            self.bias = torch.randn_like(self.bias)
-        else:
-            self.bias = torch.zeros_like(self.bias)
+        self.bias = torch.zeros_like(self.bias)
 
     def forward(self, x):
         self.cache = x
-        y = torch.addmm(self.bias, x, self.weight)
+        if self.use_bias:
+            y = torch.addmm(self.bias, x, self.weight)
+        else:
+            y = torch.mm(x, self.weight)
 
         return y
 
